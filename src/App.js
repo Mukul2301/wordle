@@ -2,7 +2,13 @@ import "./App.css";
 import Board from "./components/Board";
 import Keyboard from "./components/Keyboard";
 import { boardDefault, generateWordSet } from "./Words";
-import React, { useState, createContext, useEffect, useMemo } from "react";
+import React, {
+  useState,
+  createContext,
+  useEffect,
+  useMemo,
+  useCallback,
+} from "react";
 import GameOver from "./components/GameOver";
 import Instructions from "./components/Instructions";
 
@@ -27,7 +33,7 @@ const App = () => {
     });
   }, []);
 
-  const onEnter = () => {
+  const onEnter = useCallback(() => {
     if (currAttempt.letter !== 5) return;
 
     let currWord = "";
@@ -48,26 +54,29 @@ const App = () => {
     if (currAttempt.attempt === 5) {
       setGameOver({ gameOver: true, guessedWord: false });
     }
-  };
+  }, [currAttempt, board, correctWord, wordSet]);
 
-  const onDelete = () => {
+  const onDelete = useCallback(() => {
     if (currAttempt.letter === 0) return;
     const newBoard = [...board];
     newBoard[currAttempt.attempt][currAttempt.letter - 1] = "";
     setBoard(newBoard);
     setCurrAttempt({ ...currAttempt, letter: currAttempt.letter - 1 });
-  };
+  }, [currAttempt, board]);
 
-  const onSelectLetter = (key) => {
-    if (currAttempt.letter > 4) return;
-    const newBoard = [...board];
-    newBoard[currAttempt.attempt][currAttempt.letter] = key;
-    setBoard(newBoard);
-    setCurrAttempt({
-      attempt: currAttempt.attempt,
-      letter: currAttempt.letter + 1,
-    });
-  };
+  const onSelectLetter = useCallback(
+    (key) => {
+      if (currAttempt.letter > 4) return;
+      const newBoard = [...board];
+      newBoard[currAttempt.attempt][currAttempt.letter] = key;
+      setBoard(newBoard);
+      setCurrAttempt({
+        attempt: currAttempt.attempt,
+        letter: currAttempt.letter + 1,
+      });
+    },
+    [currAttempt, board]
+  );
 
   const contextValue = useMemo(
     () => ({

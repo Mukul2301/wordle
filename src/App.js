@@ -84,8 +84,20 @@ const App = () => {
       gameOver,
       setGameStart,
     }),
-    [board, currAttempt, correctWord, disabledLetters, gameOver]
+    [
+      board,
+      currAttempt,
+      correctWord,
+      onSelectLetter,
+      onDelete,
+      onEnter,
+      setDisabledLetters,
+      disabledLetters,
+      gameOver,
+      setGameStart,
+    ]
   );
+
   return (
     <div className="App">
       <nav>

@@ -2,13 +2,15 @@ import "./App.css";
 import Board from "./components/Board";
 import Keyboard from "./components/Keyboard";
 import { boardDefault, generateWordSet } from "./Words";
-import React, { useState, createContext, useEffect } from "react";
+import React, { useState, createContext, useEffect, useMemo } from "react";
 import GameOver from "./components/GameOver";
+import Instructions from "./components/Instructions";
 
 export const AppContext = createContext();
 
 const App = () => {
   const [board, setBoard] = useState(boardDefault);
+  const [gameStart, setGameStart] = useState(true);
   const [currAttempt, setCurrAttempt] = useState({ attempt: 0, letter: 0 });
   const [wordSet, setWordSet] = useState(new Set());
   const [correctWord, setCorrectWord] = useState("");
@@ -67,6 +69,23 @@ const App = () => {
     });
   };
 
+  const contextValue = useMemo(
+    () => ({
+      board,
+      setBoard,
+      currAttempt,
+      setCurrAttempt,
+      correctWord,
+      onSelectLetter,
+      onDelete,
+      onEnter,
+      setDisabledLetters,
+      disabledLetters,
+      gameOver,
+      setGameStart,
+    }),
+    [board, currAttempt, correctWord, disabledLetters, gameOver]
+  );
   return (
     <div className="App">
       <nav>
@@ -74,24 +93,12 @@ const App = () => {
           <h1>Wordle</h1>by Mukul ❤️
         </span>
       </nav>
-      <AppContext.Provider
-        value={{
-          board,
-          setBoard,
-          currAttempt,
-          setCurrAttempt,
-          correctWord,
-          onSelectLetter,
-          onDelete,
-          onEnter,
-          setDisabledLetters,
-          disabledLetters,
-          gameOver,
-        }}
-      >
+      <AppContext.Provider value={contextValue}>
         <div className="game">
-          <Board />
-          {gameOver.gameOver ? <GameOver /> : <Keyboard />}
+          {gameStart ? <Instructions setGameStart={setGameStart} /> : <Board />}
+          <div style={{ display: gameStart ? "none" : "block" }}>
+            {gameOver.gameOver ? <GameOver /> : <Keyboard />}
+          </div>
         </div>
       </AppContext.Provider>
     </div>

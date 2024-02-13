@@ -78,7 +78,7 @@ const Keyboard = () => {
         })}
         <Key keyVal={"DELETE"} bigKey />
       </div>
-      <div className="line3">
+      <div className="line4">
         <Key keyVal={"ENTER"} bigKey />
       </div>
     </div>

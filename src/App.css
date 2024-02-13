@@ -1,5 +1,6 @@
 * {
   background-color: #121212;
+  box-sizing: border-box;
 }
 
 .App {
@@ -7,6 +8,7 @@
   width: 100vw;
   height: 100vh;
   color: white;
+  overflow-x: hidden;
 }
 
 body {
